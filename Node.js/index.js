@@ -25,11 +25,49 @@ const path = require("path");
 const os = require("os");
 const url = require("url");
 const crypto = require("crypto");
-const sayHello = require("./greetings");
+const sayHello = require("./greetings1");
 const math = require("./math");
 const lodash = require("lodash");
+const readline = require("readline");
+const EventEmitter = require("events");
 
-// Create a server
+// event emitter
+
+const emitter = new EventEmitter();
+
+// Listener 1
+const listener1 = () => {
+  console.log("Event emitted in event 1");
+};
+
+// Listener 2
+const listener2 = () => {
+  console.log("Event emitted in event 2");
+};
+
+// Add listeners
+emitter.on("event", listener1);
+emitter.on("event", listener2);
+
+// Emit the event (both listeners will trigger)
+emitter.emit("event");
+
+// Remove a specific listener (listener1)
+emitter.removeListener("event", listener1);
+
+console.log("Listener 1 removed");
+
+// Emit the event again (only listener2 will trigger)
+emitter.emit("event");
+
+// Remove all listeners for the "event"
+emitter.removeAllListeners("event");
+
+console.log("All listeners removed");
+
+// Emit the event again (no listeners will trigger)
+emitter.emit("event");
+
 // const server = http.createServer((req, res) => {
 //   res.writeHead(200, { "Content-Type": "text/plain" });
 //   res.end("Hello, World!\n");
@@ -135,9 +173,90 @@ const lodash = require("lodash");
 
 //3. piping streams
 
-const readableStream = fs.createReadStream("example.txt");
-const writeableStream = fs.createWriteStream("example-output.txt");
-readableStream.pipe(writeableStream);
-writeableStream.on("finish", () => {
-  console.log("File copied Successfully!");
-});
+// for small files
+
+// const readableStream = fs.createReadStream("example.txt");
+// const writeableStream = fs.createWriteStream("example-output.txt");
+// readableStream.pipe(writeableStream);
+// writeableStream.on("finish", () => {
+//   console.log("File copied Successfully!");
+// });
+
+//for large files
+
+// const readableStream = fs.createReadStream("example.txt");
+// const rl = readline.createInterface({
+//   input: readableStream,
+// });
+// rl.on("line", (line) => {
+//   console.log("Line: " + line);
+// });
+
+// rl.on("close", () => {
+//   console.log("Close: The File Finished with processing");
+// });
+
+//Directory creating
+
+// fs.mkdir("NewDirectory", (err) => {
+//   if (err) throw err;
+//   console.log("Directory created! successfully");
+// });
+
+// fs.mkdirSync("NewDirectory2");
+// console.log("Directory created! successfully");
+
+//reading the directory
+
+// fs.readdir("./", (err, files) => {
+//   if (err) throw err;
+//   console.log(files);
+// });
+
+// const files = fs.readdirSync("./");
+// console.log(files);
+
+// const dirName = "NewDirectory3";
+// if (fs.existsSync(dirName)) {
+//   console.log("Directory exists");
+// } else {
+//   console.log("Directory does not exist");
+// }
+
+// fs.rmdir("NewDirectory2", (err) => {
+//   if (err) throw err;
+//   console.log("Directory deleted successfully");
+// });
+// this is only refer to delete the directory if directory is empty
+
+// fs.rm("NewDirectory2", { recursive: true }, (err) => {
+//   if (err) throw err;
+//   console.log("Directory deleted successfully");
+// });
+
+//rename the directory
+
+// fs.rename("NewDirectory2", "NewDirectory4", (err) => {
+//   if (err) throw err;
+//   console.log("Directory renamed successfully");
+// });
+
+// // for check the stats of the directory
+// fs.stat("example.txt", (err, stats) => {
+//   if (err) throw err;
+//   console.log(stats);
+// });
+// fs.stat("./", (err, stats) => {
+//   if (err) throw err;
+//   console.log(stats);
+// });
+
+//for watching the directory
+// fs.watch("greetings.js", (eventType, filename) => {
+//   console.log(`Event: ${eventType}`);
+//   if (filename) {
+//     console.log(`Filename: ${filename}`);
+//   } else {
+//     console.log("Filename not provided");
+//   }
+// });
